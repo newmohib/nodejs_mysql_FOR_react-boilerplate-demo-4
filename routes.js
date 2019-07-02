@@ -5,6 +5,7 @@ var router = express.Router();
 router.use(cors())
 var helloMiddlewares = require('./helpers/middlewares');
 var loginController = require('./controllers/loginController');
+var signupController = require('./controllers/signupController');
 var campaignController = require('./controllers/campaignController');
 
 //Home
@@ -12,6 +13,7 @@ router.post('/campaign',helloMiddlewares.isAuthorize, campaignController.createC
 
 //login
 router.post('/login', loginController.login);
+router.post('/signup', signupController.signup);
 
 module.exports = router;
 
