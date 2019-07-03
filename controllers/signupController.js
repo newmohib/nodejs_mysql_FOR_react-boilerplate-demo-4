@@ -24,11 +24,11 @@ exports.signup = function (req, res, next) {
         console.log("Connected!");
     });
 
-    const insertIntoUser=(insertId)=>{
-        console.log('insertIntoUser',insertId);
+    const insertIntoUser=(userDetailsInsertId)=>{
+        console.log('insertIntoUser',userDetailsInsertId);
         var sql = "INSERT INTO user ( username, password , userDetailsId) VALUES ?";
         var values = [
-            [ username, password ,insertId ]
+            [ username, password ,userDetailsInsertId ]
         ];
         database.databaseConnect.query(sql,[values], function (err, result) {
             if (err){ 
@@ -42,9 +42,9 @@ exports.signup = function (req, res, next) {
     }
 
 
-    var sql = "INSERT INTO userDetails ( firstName , lastName, email , phone , gender  , username , password) VALUES ?";
+    var sql = "INSERT INTO userDetails ( firstName , lastName, email , phone , gender, birthDate, username , password) VALUES ?";
     var values = [
-        [ firstName , lastName , email , phone, gender  , username , password ]
+        [ firstName , lastName , email , phone, gender, birthDate, username , password ]
     ];
     database.databaseConnect.query(sql,[values], function (err, result) {
         if (err){ 
