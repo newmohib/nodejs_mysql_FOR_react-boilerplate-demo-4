@@ -1,7 +1,8 @@
 var database = require('../helpers/database');
+var config = require('../config');
 var jwt = require('jsonwebtoken');
 
-
+const secret = config.secretKeyAuthorization;
 //create token
 
 function generateToken(req) {
@@ -45,7 +46,7 @@ exports.token = function (req, res, next) {
   // });
 
   
-  const secret = "create_a_token";
+  //const secret = "create_a_token";
 
   const createToken = jwt.sign({
     auth: objData,

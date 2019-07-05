@@ -1,4 +1,8 @@
 var database = require('../helpers/database');
+var config = require('../config');
+var jwt = require('jsonwebtoken');
+
+const secret = config.secretKeyAuthorization;
 
 // exports.login = function(req,res, next){
 //     console.log('request',req.body);
@@ -115,7 +119,16 @@ exports.login = function (req, res, next) {
 
     // user
     if (username === _username && password === _password) {
-        res.send(objData);
+
+        const createToken = jwt.sign({
+            auth: objData,
+            agent: req.headers['user-agent'],
+            exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60 // Note: in seconds!
+          }, secret);
+          console.log("token", createToken);
+          console.log("time", Math.floor(new Date().getTime()) + 7 * 24 * 60 * 60);
+
+        res.send({...objData , isAuthorization:createToken});
     } else {
         res.send(errorData);
     }
