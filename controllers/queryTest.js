@@ -36,8 +36,8 @@
 
     //database create
 
-    // con.query("CREATE DATABASE users", function (err, result) {
-    //     if (err) throw err;
+    // database.databaseConnect.query("CREATE DATABASE users", function (err, result) {
+    //     if (err) console.log("error");
     //     console.log("Database created", result);
     // });
 
