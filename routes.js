@@ -14,6 +14,7 @@ router.post('/campaign',helloMiddlewares.isAuthorize, campaignController.createC
 
 //login
 router.post('/login', loginController.login);
+router.post('/newLogin', loginController.newLogin);
 router.post('/signup', signupController.signup);
 router.post('/token', helloMiddlewares.authorizeWithToken , tokenController.token);
 

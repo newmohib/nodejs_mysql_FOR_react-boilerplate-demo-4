@@ -1,4 +1,4 @@
-var database = require('../helpers/database');
+var databaseConnectiton = require('../helpers/database');
 
 
 
@@ -19,7 +19,7 @@ exports.signup = function (req, res, next) {
 
      
 
-    database.databaseConnect.connect(function (err) {
+    databaseConnectiton.localConnect.connect(function (err) {
         if (err) console.log(err);
         console.log("Connected!");
     });
@@ -30,7 +30,7 @@ exports.signup = function (req, res, next) {
         var values = [
             [ username, password ,userDetailsInsertId ]
         ];
-        database.databaseConnect.query(sql,[values], function (err, result) {
+        databaseConnectiton.localConnect.query(sql,[values], function (err, result) {
             if (err){ 
                 res.send({ ...errorData, ...err});
             }else{
@@ -46,7 +46,7 @@ exports.signup = function (req, res, next) {
     var values = [
         [ firstName , lastName , email , phone, gender, birthDate, username , password ]
     ];
-    database.databaseConnect.query(sql,[values], function (err, result) {
+    databaseConnectiton.localConnect.query(sql,[values], function (err, result) {
         if (err){ 
             console.log(err);
             res.send({ ...errorData, ...err});

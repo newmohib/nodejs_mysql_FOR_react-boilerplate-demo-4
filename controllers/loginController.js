@@ -1,4 +1,4 @@
-var database = require('../helpers/database');
+var databaseConnectiton = require('../helpers/database');
 var config = require('../config');
 var jwt = require('jsonwebtoken');
 
@@ -7,8 +7,9 @@ const secret = config.secretKeyAuthorization;
 
 
 
+let loginController={}
 
-exports.login = function (req, res, next) {
+loginController.login = function (req, res, next) {
     console.log('request', req.body);
     let userList = { userdata: { username: 'mohib', password: '123456' } }
     let _username = userList.userdata.username;
@@ -21,7 +22,7 @@ exports.login = function (req, res, next) {
 
 
 
-    database.databaseConnect.connect(function (err) {
+    databaseConnectiton.localConnect.connect(function (err) {
         if (err) console.log(err);
         console.log("Connected!");
     });
@@ -35,11 +36,11 @@ exports.login = function (req, res, next) {
 
     // username: 'mohib'
     var usern= "2";
-   var sql = `SELECT * FROM user WHERE username='${username}'`;
+   var sql = `SELECT * FROM userdetails WHERE username='${username}'`;
     // var sql = `SELECT * FROM user WHERE password=${password}`;
     console.log('query',sql);
 
-    database.databaseConnect.query(sql, function (err, result) {
+    databaseConnectiton.localConnect.query(sql, function (err, result) {
         if (err) console.log(err);
         console.log( username ,"RowDataPacket", result);
     });
@@ -61,3 +62,37 @@ exports.login = function (req, res, next) {
     }
 
 };
+
+
+
+loginController.newLogin = function (req, res, next) {
+    console.log('request', req.body);
+
+    var email = req.body.email;
+    let password = req.body.password;
+
+    let objData = { email: email, password: password };
+    let errorData = { error: "Your email or Passwrd is wrong" }
+
+    databaseConnectiton.remortConnect.connect(function (err) {
+        if (err) console.log(err);
+        console.log("Connected!");
+    });
+   var sql = `SELECT * FROM users WHERE email='${email}'`;
+    databaseConnectiton.remortConnect.query(sql, function (err, result) {
+        console.log("err",err,"result",result);
+        if (result.length > 0 &&  password === result[0].password) {
+            const createToken = jwt.sign({
+                auth: objData,
+                agent: req.headers['user-agent'],
+                exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60 // Note: in seconds!
+            }, secret);
+            res.send({ ...objData, isAuthorization: createToken });
+        } else {
+            res.send(errorData);
+        }
+    });
+};
+
+module.exports=loginController
+
